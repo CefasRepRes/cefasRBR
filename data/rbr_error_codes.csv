@@ -1,0 +1,27 @@
+Error,Hex,Description
+ ,0xFF800001,internal computation failure (eg. divide-by-zero)
+ ,0xFF800002,unable to compute value channel not calibrated
+0,0xFF810000,generic unknown or unexpected error
+1,0xFF810001,EOC bit unexpectedly set in ADC output
+2,0xFF810002,DMY bit unexpectedly set in ADC output
+3,0xFF810003,internal addressing error
+4,0xFF810004,too much data for internal transfer
+5,0xFF810005,access to internal bus denied
+6,0xFF810006,timeout sending internal command
+7,0xFF810007,timeout receiving internal response
+8,0xFF810008,generic failure to interpret response
+9,0xFF810009,no sample was started
+10,0xFF81000A,sample acquisition still in progress
+11,0xFF81000B,sample process failed
+12,0xFF81000C,no valid samples to average
+13,0xFF81000D,internal response unexpectedly short
+14,0xFF81000E,supporting channel value not valid or unknown equation
+15,0xFF81000F,(reserved)
+16,0xFF810010,channel value is outside reasonable range
+17,0xFF810011,channel value is below minimum measurable limit
+18,0xFF810012,channel value is above maximum measurable limit
+19,0xFF810013,sensor output not received within timeout
+20,0xFF810014,unable to parse sensor output
+21,0xFF810015,channel is not correctly calibrated
+22,0xFF810016,floating point value is badly formed
+23,0xFF810017,channel not logged

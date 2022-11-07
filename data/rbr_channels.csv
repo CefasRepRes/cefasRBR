@@ -1,0 +1,156 @@
+﻿Type,Equation,Units,Manufacturer,Description
+acc_00,linear,g,RBR,Acceleration (in g's)
+alti00,distancefromechotiming,m,RBR,Distance from echo timing
+baro00,linear double,ps,RBR,Frequency counter[2]
+baro01,linear double,ps,RBR,Frequency counter[2]
+baro02,deri_bprpres,dbar,Paroscientific/RBR,BPR calculated pressure[2]
+baro03,deri_bprtemp,°C,Paroscientific/RBR,BPR calculated temperature[2]
+bpr_08,deri_bprpres,dbar,Paroscientific/RBR,BPR calculated pressure[2]
+bpr_09,deri_bprtemp,°C,Paroscientific/RBR,BPR calculated temperature[2]
+cnt_00,none,counts,RBR,"Measurement count, useful for eg. regimes bins"
+cond08,corr_cond3,μS/cm,RBR,Fresh water conductivity
+cond09,corr_cond,mS/cm,RBR,Marine conductivity
+cond10,corr_cond,mS/cm,RBR,"Marine conductivity, Combined C.T cell"
+cond11,corr_cond1,mS/cm,RBR,"Marine conductivity, Deep combined C.T cell"
+cond12,corr_cond2,mS/cm,RBR,"Marine conductivity, 2000dbar Combined C.T cell"
+cond13,corr_cond3,mS/cm,RBR,"Marine conductivity, RBRlegato C.T cell"
+cond14,corr_cond3,mS/cm,RBR,"Marine conductivity, RBRsaildrone C cell"
+cond15,corr_cond3,mS/cm,RBR,"Marine conductivity, UV Antifouling CTD"
+cond16,corr_cond3,mS/cm,RBR,"Marine conductivity, 6000dbar C cell"
+cond17,corr_cond3,mS/cm,RBR,"Marine conductivity, 6000dbar Combined C.T cell"
+cond18,corr_cond3,mS/cm,RBR,Marine conductivity
+cond19,corr_cond3,mS/cm,RBR,"Marine conductivity, Combined C.T cell"
+cond21,corr_cond3,mS/cm,RBR,"Marine conductivity, 2000dbar Combined C.T cell"
+cond22,corr_cond3,mS/cm,RBR,"Marine conductivity, RBRlegato C.T cell"
+cond24,corr_cond3,mS/cm,RBR,"Corrected Marine conductivity (inductive),transverse C.T cell, Ti"
+cond25,corr_cond3,mS/cm,RBR,"Corrected Marine conductivity (inductive),transverse C.T cell, POM"
+doxy03,linear,%,Oxyguard,Dissolved oxygen saturation
+doxy07,linear,%,Aanderaa,"Optode: dissolved oxygen saturation, serial"
+doxy08,corr_rinkoB,%,JFE Advantech,Rinko-III (B): dissolved oxygen saturation with temperature
+doxy09,corr_rinkoBT,%,JFE Advantech/RBR,Rinko-III (B): dissolved oxygen saturation without temperature
+doxy10,linear,μmol/L,Aanderaa,"Optode: dissolved oxygen concenration, serial"
+doxy13,linear,%,RBR,"Dissolved oxygen saturation, serial RBRsolo DO|rt"
+doxy22,deri_o2sat_garcia,%,RBR,Dissolved oxygen saturation derived from concentration via Gordon and Garcia
+doxy23,corr_o2conc_garcia,μmol/L,RBR,"Dissolved oxygen concentration compensated, serial RBRcoda ODO"
+doxy25,linear,%,Oxyguard,Dissolved oxygen (saturation)
+doxy27,corr_o2conc_garcia,μmol/L,RBR,"Dissolved oxygen concentration compensated, serial RBRcoda ODO|slow"
+doxy28,corr_o2conc_garcia,μmol/L,RBR,"Dissolved oxygen concentration compensated, serial RBRcoda ODO|fast"
+doxy32,corr_rinkoB2,%,JFE Advantech,Rinko-III (B): dissolved oxygen saturation with temperature
+doxy33,corr_o2conc_garcia,μmol/L,RBR,"Dissolved oxygen concentration compensated, serial RBRcoda ODO, angled"
+dpth01,deri_depth,m,-,Derived depth
+echo01,lin,ms,RBR,Echo timing
+eco_00,lin,counts,WET Labs,Generic channel for WET Labs ECO Triplet/Puck sensors
+fluo00,linear,μg/L,Seapoint,Fluorometry-Phycoerythrin
+fluo01,linear,μg/L,Seapoint,Fluorometry-Chlorophyll
+fluo02,linear,μg/L,Seapoint,Fluorometry-Rhodamine
+fluo03,linear,μg/L,Seapoint,Fluorometry-UV/CDOM
+fluo04,linear,μg/L,Seapoint,Fluorometry-Phycocyanin
+fluo10,linear,μg/L,Turner Designs,Fluorometry-Chlorophyll-a
+fluo11,linear,ppb,Turner Designs,Fluorometry-CDOM
+fluo12,linear,ppb,Turner Designs,Fluorometry-Crude oil
+fluo13,linear,cells/mL,Turner Designs,Fluorometry-Cyanobacteria
+fluo14,linear,ppb,Turner Designs,Fluorometry-Optical brighteners
+fluo15,linear,ppb,Turner Designs,Fluorometry-Fluorescein
+fluo16,linear,ppb,Turner Designs,Fluorometry-Rhodamine
+fluo17,linear,ppb,Turner Designs,Fluorometry-Refined fuels
+fluo18,linear,ppm,Turner Designs,Fluorometry-BTEX
+fluo19,linear,cells/mL,Turner Designs,Fluorometry-Phycocyanin
+fluo20,linear,cells/mL,Turner Designs,Fluorometry-Phycoerythrin
+fluo21,linear,V,Turner Designs,Fluorometry-custom
+fluo22,linear,RFUB,Turner Designs,Chlorophyll a (C3)
+fluo23,linear,RFUB,Turner Designs,CDOM (C3)
+fluo24,linear,RFUB,Turner Designs,Crude oil (C3)
+fluo25,linear,RFUB,Turner Designs,Cyanobacteria (C3)
+fluo26,linear,RFUB,Turner Designs,Optical brighteners (C3)
+fluo27,linear,RFUB,Turner Designs,Fluorescein dye (C3)
+fluo28,linear,RFUB,Turner Designs,Rhodamine dye (C3)
+fluo29,linear,RFUB,Turner Designs,Refined fuels (C3)
+fluo30,linear,RFUB,Turner Designs,BTEX (C3)
+fluo31,linear,RFUB,Turner Designs,Phycocyanin (C3)
+fluo32,linear,RFUB,Turner Designs,Phycoerythrin (C3)
+fluo33,linear,counts,WET Labs,Chlorophyll a (ECO Puck)
+fluo34,linear,counts,WET Labs,CDOM (ECO Puck)
+fluo35,linear,counts,WET Labs,Phycoerythrin (ECO Puck)
+fluo36,linear,counts,WET Labs,Rhodamine (ECO Puck)
+fluo37,linear,counts,Turner Designs,"Fluorescence, minimum (Fo)"
+fluo38,linear,counts,Turner Designs,"Fluorescence, maximum (Fm)"
+fluo39,linear,counts,Turner Designs,"Fluorescence, variable (Fv)"
+fluo40,linear,percent,Turner Designs,"Fluorescence, yield"
+fluo41,linear,μg/L,Seapoint,Fluorometry-Fluorescein
+fluo42,linear,counts,WET Labs,Chlorophyll a (ECO FLNTU)
+hdng00,linear,degrees,RBR,Euler angle - heading
+irr_00,optic2,μW/cm²/nm,Satlantic,Irradiance
+irr_01,corr_irr,V,RBR,"Irradiance, 490nm"
+irr_02,corr_irr,μW/cm²/nm,RBR,"Irradiance, 475nm"
+irr_05,corr_irr2,μW/cm²/nm,RBR,"Irradiance (analog sensor), generic"
+irr_06,linear,μW/cm²/nm,RBR,"Irradiance (serial sensor), generic"
+mag_00,linear,μT,RBR,Magnetic field strength (in micro-Tesla's)
+meth00,corr_metsmet,μmol/L,Franatech,METS methane concentration
+opt_07,linear,°,RBR,Calibrated phase output from RBRcoda ODO
+opt_14,linear,°,RBR,Calibrated phase output from RBRcoda ODO|slow
+opt_15,linear,°,RBR,Calibrated phase output from RBRcoda ODO|fast
+opt_24,linear,°,RBR,"Calibrated phase output from RBRcoda ODO, angled"
+orp_01,linear,V,Idronaut,ORP (Oxidation/Reduction Potential)
+par_00,linear,μmol/m²/s,Licor,PAR (photosynthetically active radiation)
+par_01,linear,μmol/m²/s,Biospherical,PAR (photosynthetically active radiation)
+par_03,optic2,μmol/m²/s,Satlantic,PAR (photosynthetically active radiation)
+par_05,corr_irr2,μmol/m²/s,RBR,"PAR (photosynthetically active radiation), analog sensor"
+par_06,linear,μmol/m²/s,RBR,"PAR (photosynthetically active radiation), serial sensor"
+pco200,linear,ppm,Turner Designs,C-sense CO2 partial pressure
+peri00,linear double,ps,RBR,Frequency counter[2]
+peri01,linear double,ps,RBR,Frequency counter[2]
+ph__00,linear,pH_units,AMT,pH
+ph__01,linear,pH_units,Idronaut,pH
+ph__02,corr_ph,pH_units,Idronaut,Corrected pH
+phas00,linear,degrees,Aanderaa,Calibrated phase output from serial AADI Optode
+pres08,deri_seapres,dbar,-,Derived hydrostatic (sea) pressure
+pres23,linear,dbar,RBR,"Pressure (absolute, temperature compensated), serial RBRsolo D|rt, RBRduet T.D|rt"
+pres24,corr_pres2,dbar,RBR,"Pressure (absolute, temperature compensated)"
+pres28,corr_pres5,dbar,RBR,"Pressure (absolute, temperature compensated)"
+pres29,corr_pres2,dbar,RBR,"Pressure (absolute, temperature compensated), UV Antifouling CTD"
+ptch00,linear,degrees,RBR,Euler angle - pitch
+roll00,linear,degrees,RBR,Euler angle - roll
+sal_00,deri_salinity,PSU,-,"Derived salinity, PSS78."
+scon00,deri_speccond,μS/cm,-,Derived specific conductivity
+sos_00,deri_sos,m/s,-,"Derived speed of sound, UNESCO, Chen and Millero"
+temp01,corr_rinkotemp,°C,JFE Advantech,"Temperature, Rinko-III"
+temp04,temp,°C,RBR,Temperature (T-string)
+temp06,corr_metstemp,°C,Franatech,"Temperature, METS"
+temp07,linear,°C,Aanderaa,"Temperature, from serial Optode"
+temp09,temp,°C,RBR,Temperature
+temp13,linear,°C,RBR,"Temperature, serial RBRsolo D|rt, RBRduet T.D|rt"
+temp14,temp,°C,RBR,"Temperature, combined C.T cell"
+temp16,linear,°C,RBR,"Temperature, serial RBRcoda ODO"
+temp17,linear,°C,RBR,"Temperature, serial RBRcoda ODO|slow"
+temp19,temp,°C,RBR,Temperature (fast)
+temp22,temp,°C,RBR,"Temperature, compensating channel for conductivity"
+temp23,linear,°C,Campbell,"Temperature, OBS-501"
+temp26,temp,°C,RBR,Temperature RBRlegato (1s)
+temp27,temp,°C,RBR,Temperature RBRlegato (fast response)
+temp30,temp,°C,RBR,"Temperature, compensating channel for irradiance (RBR 490nm Radiometer)"
+temp31,temp,°C,RBR,"Temperature, standard, UV Antifouling CTD"
+temp32,temp,°C,RBR,"Temperature, standard, 6000dbar Combined C.T cell"
+temp33,temp,°C,RBR,"Temperature, fast, 6000dbar Combined C.T cell"
+temp34,temp,°C,RBR,"Temperature, compensating channel for Marine C and CT 6000m"
+temp35,temp,°C,RBR,"Temperature, fast, transverse CTD"
+temp36,temp,°C,RBR,"Temperature, standard, transverse CTD"
+temp37,linear,°C,RBR,"Temperature, serial RBRcoda ODO, angled"
+tran00,linear,trans_units,generic,Transmittance[1]
+tran01,linear,%,WET Labs,Transmittance
+tran02,linear,V,WET Labs,Transmittance
+tran03,linear,1/m,Sequoia,Transmittance
+turb00,linear,NTU,Seapoint,Turbidity
+turb01,linear,NTU,Turner Designs,Turbidity
+turb02,linear,NTU,Campbell,"Turbidity, OBS3+"
+turb03,linear,NTU,Turner Designs,"Turbidity, C3 serial"
+turb04,linear,counts,WET Labs,"Backscatter, ECO Puck"
+turb06,cubic,FTU,Seapoint,"Turbidity, STM-S S-channel"
+turb07,cubic,NTU,Seapoint,"Turbidity, STM-S R-channel"
+turb08,linear,NTU,Campbell,"Turbidity, OBS-501 optical backscatter"
+turb09,linear,NTU,Campbell,"Turbidity, OBS-501 suspended solids"
+turb10,linear,counts,WET Labs,Turbidity (ECO FLNTU)
+turb11,linear,V,Sequoia Scientific,"Turbidity, LISST ABS acoustic backscatter"
+volt00,linear,V,generic,Voltage (0V to +5V)
+volt01,linear,V,generic,Voltage (–2.5V to +2.5V)
+volt02,linear,V,generic,Voltage (0V to +10V)
+volt03,linear,V,generic,Voltage (–10V to+10V)

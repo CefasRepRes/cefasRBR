@@ -1,0 +1,43 @@
+Event,Hex,Description,Payload
+0,0x00,Unknown or unrecognized events,undefined
+1,0x01,Time synchronization marker,undefined
+2,0x02,stop command received,undefined
+3,0x03,Run-time error encountered,undefined
+4,0x04,CPU reset detected,undefined
+5,0x05,One or more parameters recovered after reset,undefined
+6,0x06,Restart failed : Real Time Clock/Calendar contents not valid,undefined
+7,0x07,Restart failed : logger status not valid,undefined
+8,0x08,Restart failed : primary schedule parameters not be recovered. ,undefined
+9,0x09,Unable to load alarm time for next sample,undefined
+10,0x0A,Sampling restarted after resetting Real Time Clock (RTC),undefined
+11,0x0B,Parameters recovered. sampling restarted after resetting RTC.,undefined
+12,0x0C,Sampling stopped. end time reached,undefined
+13,0x0D,Start of a recorded burst,undefined
+14,0x0E,Start of a wave burst,undefined
+15,0x0F,( reserved ),undefined
+16,0x10,Streaming now OFF for both ports,undefined
+17,0x11,Streaming ON for USB. OFF for serial,undefined
+18,0x12,Streaming OFF for USB. ON for serial,undefined
+19,0x13,Streaming now ON for both ports,undefined
+20,0x14,Sampling started. threshold condition satisfied,undefined
+21,0x15,Sampling paused. threshold condition not met,undefined
+22,0x16,Power source switched to internal battery,undefined
+23,0x17,Power source switched to external battery,undefined
+24,0x18,Twist activation started sampling,undefined
+25,0x19,Twist activation paused sampling,undefined
+26,0x1A,WiFi module detected and activated,undefined
+27,0x1B,WiFi module de-activated; removed or activity timeout,undefined
+28,0x1C,Regimes enabled. but not yet in a regime,undefined
+29,0x1D,Entered regime 1,undefined
+30,0x1E,Entered regime 2,undefined
+31,0x1F,Entered regime 3,undefined
+32,0x20,Start of regime bin, number of readings in average; see note below
+33,0x21,Begin profiling 'up' cast, address of sample in dataset-1
+34,0x22,Begin profiling 'down' cast, address of sample in dataset-1
+35,0x23,End of profiling cast, address of first sample not in cast
+36,0x24,Battery failed. schedule finished.,undefined
+37,0x25,Directional dependent samplingr beginning of fast sampling mode,undefined
+38,0x26,Directional dependent sampling. beginning of slow sampling mode,undefined
+39,0x27,Energy used marker. internal battery, energy consumed from power source since last accumulator reset
+40,0x28,Energy used marker. external power source, energy consumed from power source since last accumulator reset
+41,0x29,Device control action result, result of control action
