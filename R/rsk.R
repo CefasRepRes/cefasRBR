@@ -86,6 +86,7 @@ rsk.activations <- function(rsk, min_length_activation = 120){
 #'
 #' @import data.table
 #' @return cefasRSK object
+#' @export
 #'
 rsk.regions <- function(rsk){
   if(dbInfo$type != "EPdesktop"){stop("only tested with EPdesktop RSK files")}
