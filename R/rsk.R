@@ -12,7 +12,7 @@ read.rsk <- function(filename){
   con <- DBI::dbConnect(RSQLite::SQLite(), dbname = filename)
 
   dbInfo <- RSQLite::dbReadTable(con, "dbInfo")
-  if(dbInfo$type != "EPdesktop"){stop("only tested with EPdesktop RSK files")}
+  if(dbInfo$type != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
 
   events = data.table::setDT(DBI::dbReadTable(con, "events"))
   events = merge(events, rbr_event_codes, by.x = "type", by.y = "Event")[order(tstamp)]
@@ -22,7 +22,7 @@ read.rsk <- function(filename){
   errors[, channelName := paste0("channel", formatC(channelOrder, 1, format = "d", flag = "0"))]
 
   channels = setDT(DBI::dbReadTable(con, "channels"))
-  channels = merge.data.table(channels, rbr_channels[,.(Type, Description)], by.x = "shortName", by.y = "Type")
+  channels = merge.data.table(channels, rbr_channels[,.(Type, Description)], by.x = "shortName", by.y = "Type", all.x = T)
   channels[, channelName := paste0("channel", formatC(channelID, 1, format = "d", flag = "0"))]
 
   region_query = DBI::dbSendQuery(con, "SELECT * from region LEFT JOIN regionGeoData ON region.regionID = regionGeoData.regionID")
