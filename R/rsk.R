@@ -46,7 +46,7 @@ read.rsk <- function(filename){
   data.table::setnames(data, channels$channelName, channels$shortName, skip_absent = T)
 
   ret = list() # Initialise return list containing data and metadata
-  ret[["rsk_version"]] = dbInfo
+  ret[["dbInfo"]] = dbInfo
   ret[["regions"]] = regions
   ret[["events"]] = events
   ret[["channels"]] = channels[order(channelID), -c("feModuleType", "feModuleVersion", "longName", "channelName")]
@@ -67,7 +67,7 @@ read.rsk <- function(filename){
 #' @export
 #'
 rsk.activations <- function(rsk, min_length_activation = 120){
-  if(dbInfo$type != "EPdesktop"){stop("only tested with EPdesktop RSK files")}
+  if(rsk$dbInfo$type != "EPdesktop"){stop("only tested with EPdesktop RSK files")}
   events = rsk[["events"]]
   data = rsk[["data"]]
   # ---- mark activations
@@ -93,7 +93,7 @@ rsk.activations <- function(rsk, min_length_activation = 120){
 #' @export
 #'
 rsk.regions <- function(rsk){
-  if(dbInfo$type != "EPdesktop"){stop("only tested with EPdesktop RSK files")}
+  if(rsk$dbInfo$type != "EPdesktop"){stop("only tested with EPdesktop RSK files")}
   # Apply Profiles
   for(ID in rsk$regions[type == "PROFILE"]$regionID){
     region = rsk$regions[regionID == ID]
