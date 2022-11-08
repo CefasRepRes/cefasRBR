@@ -2,6 +2,7 @@
 
 export(read.rsk)
 export(rsk.activations)
+export(rsk.regions)
 import(data.table)
 importFrom(data.table,":=")
 importFrom(data.table,.BY)
