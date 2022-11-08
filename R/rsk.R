@@ -25,7 +25,11 @@ read.rsk <- function(filename){
   channels = merge.data.table(channels, rbr_channels[,.(Type, Description)], by.x = "shortName", by.y = "Type", all.x = T)
   channels[, channelName := paste0("channel", formatC(channelID, 1, format = "d", flag = "0"))]
 
-  region_query = DBI::dbSendQuery(con, "SELECT * from region LEFT JOIN regionGeoData ON region.regionID = regionGeoData.regionID")
+  region_query = DBI::dbSendQuery(con, "
+                                  SELECT * from region
+                                  LEFT JOIN regionGeoData ON region.regionID = regionGeoData.regionID
+                                  LEFT JOIN regionPlateau ON region.regionID = regionPlateau.regionID
+                                  ")
   regions = data.table::setDT(DBI::dbFetch(region_query))
   DBI::dbClearResult(region_query)
 
