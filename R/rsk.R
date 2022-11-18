@@ -51,9 +51,10 @@ read.rsk <- function(filename){
 
   ret = list() # Initialise return list containing data and metadata
   ret[["dbInfo"]] = dbInfo
+  ret[["instrument"]] = instrument
+  ret[["channels"]] = channels[order(channelID), -c("feModuleType", "feModuleVersion", "longName", "channelName")]
   ret[["regions"]] = regions
   ret[["events"]] = events
-  ret[["channels"]] = channels[order(channelID), -c("feModuleType", "feModuleVersion", "longName", "channelName")]
   ret[["data"]] = data
   class(ret) = "cefasRSK"
 
