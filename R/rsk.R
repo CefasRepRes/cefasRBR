@@ -113,3 +113,11 @@ rsk.regions <- function(rsk){
   }
   return(rsk)
 }
+
+write.rsk_csv <- function(rsk, filename){
+  fwrite(rsk$instrument, filename)
+  fwrite(data.table(NA), filename, append = T)
+  fwrite(rsk$channels, filename, append = T, col.names = T)
+  fwrite(data.table(NA), filename, append = T)
+  fwrite(rsk$data, filename, append = T, col.names = T)
+}
