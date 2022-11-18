@@ -1,5 +1,3 @@
-options(digits.secs = 3) # RBR instruments have sub-second time resolution
-
 #' Read RBR Profiler data
 #'
 #' @param filename path to the .rsk file
@@ -9,10 +7,16 @@ options(digits.secs = 3) # RBR instruments have sub-second time resolution
 #' @export
 #'
 read.rsk <- function(filename){
+  options(digits.secs = 3) # RBR instruments have sub-second time resolution
   con <- DBI::dbConnect(RSQLite::SQLite(), dbname = filename)
 
   dbInfo <- RSQLite::dbReadTable(con, "dbInfo")
   if(dbInfo$type != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
+
+  suppressWarnings({
+    instrument = data.table::setDT(DBI::dbReadTable(con, "instruments"))
+    sensors = data.table::setDT(DBI::dbReadTable(con, "instrumentSensors"))
+  })
 
   events = data.table::setDT(DBI::dbReadTable(con, "events"))
   events = merge(events, rbr_event_codes, by.x = "type", by.y = "Event")[order(tstamp)]
