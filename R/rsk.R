@@ -115,6 +115,12 @@ rsk.regions <- function(rsk){
     rsk$data[tstamp %between% c(region$tstamp1, region$tstamp2),
              c("latitude", "longitude") := list(region$latitude, region$longitude)]
   }
+  # Apply Calibration regions
+  for(ID in rsk$regions[type == "CALIBRATION_PLATEAU"]$regionID){
+    region = rsk$regions[regionID == ID]
+    rsk$data[tstamp %between% c(region$tstamp1, region$tstamp2),
+             c("label", "refValue", "refUnit") := list(region$label, region$refValue, region$refUnit)]
+  }
   return(rsk)
 }
 
