@@ -31,7 +31,10 @@ read.rsk <- function(filename){
   channels[, channelName := paste0("channel", formatC(channelID, 1, format = "d", flag = "0"))]
 
   region_query = DBI::dbSendQuery(con, "
-                                  SELECT * from region
+                                  SELECT
+                                  region.regionID as regionID,
+                                  type, tstamp1, tstamp2, label, latitude, longitude, refValue, refunit
+                                  from region
                                   LEFT JOIN regionGeoData ON region.regionID = regionGeoData.regionID
                                   LEFT JOIN regionPlateau ON region.regionID = regionPlateau.regionID
                                   ")
