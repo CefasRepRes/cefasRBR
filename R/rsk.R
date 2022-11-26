@@ -8,10 +8,11 @@
 #'
 read.rsk <- function(filename){
   options(digits.secs = 3) # RBR instruments have sub-second time resolution
+  if(!file.exists(filename)){stop(paste(filename, "does not exist"))}
   con <- DBI::dbConnect(RSQLite::SQLite(), dbname = filename)
 
   dbInfo <- RSQLite::dbReadTable(con, "dbInfo")
-  if(dbInfo$type != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
+  if(dbInfo$type[1] != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
 
   suppressWarnings({
     instrument = data.table::setDT(DBI::dbReadTable(con, "instruments"))
