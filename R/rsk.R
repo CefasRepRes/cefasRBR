@@ -14,21 +14,24 @@ read.rsk <- function(filename){
   dbInfo <- RSQLite::dbReadTable(con, "dbInfo")
   if(dbInfo$type[1] != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
 
-  suppressWarnings({
+  # suppressWarnings({
     instrument = data.table::setDT(DBI::dbReadTable(con, "instruments"))
-    sensors = data.table::setDT(DBI::dbReadTable(con, "instrumentSensors"))
-  })
+    # sensors = data.table::setDT(DBI::dbReadTable(con, "instrumentSensors"))
+  # })
 
   events = data.table::setDT(DBI::dbReadTable(con, "events"))
   events = merge(events, rbr_event_codes, by.x = "type", by.y = "Event")[order(tstamp)]
 
-  errors = setDT(DBI::dbReadTable(con, "errors"))
-  errors = merge(errors, rbr_error_codes, by.x = "type", by.y = "Error")
-  errors[, channelName := paste0("channel", formatC(channelOrder, 1, format = "d", flag = "0"))]
-
   channels = setDT(DBI::dbReadTable(con, "channels"))
   channels = merge.data.table(channels, rbr_channels[,.(Type, Description)], by.x = "shortName", by.y = "Type", all.x = T)
   channels[, channelName := paste0("channel", formatC(channelID, 1, format = "d", flag = "0"))]
+
+
+  errors = setDT(DBI::dbReadTable(con, "errors"))
+  errors = merge(errors, rbr_error_codes, by.x = "type", by.y = "Error")
+  errors[, channelName := paste0("channel", formatC(channelOrder, 1, format = "d", flag = "0"))]
+  errors = merge(errors, channels[,.(channelName, shortName)], by = "channelName")
+  # errors = errors[,.(tstamp, sampleIndex, type, Description, shortName)]
 
   region_query = DBI::dbSendQuery(con, "
                                   SELECT
@@ -39,6 +42,7 @@ read.rsk <- function(filename){
                                   LEFT JOIN regionPlateau ON region.regionID = regionPlateau.regionID
                                   ")
   regions = data.table::setDT(DBI::dbFetch(region_query))
+  regions[, startTime := as.POSIXct(tstamp1/1000, origin = "1970-01-01", tz = "UTC")]
   DBI::dbClearResult(region_query)
 
   sample_period = RSQLite::dbReadTable(con, "continuous")$samplingPeriod / 1000
@@ -57,6 +61,7 @@ read.rsk <- function(filename){
   ret[["dbInfo"]] = dbInfo
   ret[["instrument"]] = instrument
   ret[["channels"]] = channels[order(channelID), -c("feModuleType", "feModuleVersion", "longName", "channelName")]
+  ret[["errors"]] = errors
   ret[["regions"]] = regions
   ret[["events"]] = events
   ret[["data"]] = data
@@ -73,7 +78,6 @@ read.rsk <- function(filename){
 #'
 #' @return cefasRSK object
 #' @import data.table
-#' @export
 #'
 rsk.activations <- function(rsk, min_length_activation = 120){
   if(rsk$dbInfo$type != "EPdesktop"){stop("only tested with EPdesktop RSK files")}
@@ -102,12 +106,18 @@ rsk.activations <- function(rsk, min_length_activation = 120){
 #' @export
 #'
 rsk.regions <- function(rsk){
-  if(rsk$dbInfo$type != "EPdesktop"){stop("only tested with EPdesktop RSK files")}
   # Apply Profiles
   for(ID in rsk$regions[type == "PROFILE"]$regionID){
     region = rsk$regions[regionID == ID]
+    region[label == "", label := ID]
     rsk$data[tstamp %between% c(region$tstamp1, region$tstamp2),
-             profile := region$label]
+             c("profile", "startTime") := list(region$label, min(region$startTime))]
+  }
+  for(ID in rsk$regions[type == "CAST"]$regionID){
+    region = rsk$regions[regionID == ID]
+    region[label == "", label := ID]
+    rsk$data[tstamp %between% c(region$tstamp1, region$tstamp2),
+             c("cast", "startTime") := list(region$label, min(region$startTime))]
   }
   # Apply GPS regions
   for(ID in rsk$regions[type == "GPS"]$regionID){
@@ -118,10 +128,34 @@ rsk.regions <- function(rsk){
   # Apply Calibration regions
   for(ID in rsk$regions[type == "CALIBRATION_PLATEAU"]$regionID){
     region = rsk$regions[regionID == ID]
+    region[label == "", label := ID]
     rsk$data[tstamp %between% c(region$tstamp1, region$tstamp2),
              c("label", "refValue", "refUnit") := list(region$label, region$refValue, region$refUnit)]
   }
   return(rsk)
+}
+
+rsk.getCalibration.RBRCoda <- function(rsk){
+  if(rsk$dbInfo$type != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
+
+  if(nrow(rsk$regions[type == "CALIBRATION_PLATEAU"]) < 2){stop("Calibration requires at least two calibration plateaus")}
+
+  # Collect calibrations
+  for(ID in rsk$regions[type == "CALIBRATION_PLATEAU"]$regionID){
+    region = rsk$regions[regionID == ID]
+    rsk$data[tstamp %between% c(region$tstamp1, region$tstamp2),
+             c("refValue", "refUnit") := list(region$refValue, region$refUnit)]
+  }
+  cal_data = rsk$data[!is.na(refValue)]
+  if(all(cal_data$refUnit == "%")){
+
+  }
+  if(all(cal_data$refUnit == "x")){
+
+  }else{
+    stop("calibration reference units are not all the same type, please amend .rsk")
+  }
+
 }
 
 write.rsk_csv <- function(rsk, filename){
@@ -131,3 +165,8 @@ write.rsk_csv <- function(rsk, filename){
   fwrite(data.table(NA), filename, append = T)
   fwrite(rsk$data, filename, append = T, col.names = T)
 }
+
+write.rsk_plot <- function(rsk){
+  #
+}
+
