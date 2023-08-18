@@ -14,10 +14,8 @@ read.rsk <- function(filename){
   dbInfo <- RSQLite::dbReadTable(con, "dbInfo")
   if(dbInfo$type[1] != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
 
-  # suppressWarnings({
-    instrument = data.table::setDT(DBI::dbReadTable(con, "instruments"))
-    # sensors = data.table::setDT(DBI::dbReadTable(con, "instrumentSensors"))
-  # })
+  instrument = data.table::setDT(DBI::dbReadTable(con, "instruments"))
+  deployments = data.table::setDT(DBI::dbReadTable(con, "deployments"))
 
   events = data.table::setDT(DBI::dbReadTable(con, "events"))
   events = merge(events, rbr_event_codes, by.x = "type", by.y = "Event")[order(tstamp)]
@@ -59,6 +57,7 @@ read.rsk <- function(filename){
 
   ret = list() # Initialise return list containing data and metadata
   ret[["dbInfo"]] = dbInfo
+  ret[["deployments"]] = deployments
   ret[["instrument"]] = instrument
   ret[["channels"]] = channels[order(channelID), -c("feModuleType", "feModuleVersion", "longName", "channelName")]
   ret[["errors"]] = errors
