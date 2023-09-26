@@ -21,6 +21,11 @@ read.rsk <- function(filename){
   events = merge(events, rbr_event_codes, by.x = "type", by.y = "Event")[order(tstamp)]
 
   channels = setDT(DBI::dbReadTable(con, "channels"))
+  channels = setDT(DBI::dbGetQuery(con, "SELECT
+                                   instrumentChannels.channelID, shortName, units, CAST(serialID AS char) AS serialID
+                                   FROM channels
+                                   LEFT JOIN instrumentChannels ON channels.channelID = instrumentChannels.channelID
+                                   LEFT JOIN instrumentSensors ON instrumentChannels.channelOrder = instrumentSensors.channelOrder"))
   channels = merge.data.table(channels, rbr_channels[,.(Type, Description)], by.x = "shortName", by.y = "Type", all.x = T)
   channels[, channelName := paste0("channel", formatC(channelID, 1, format = "d", flag = "0"))]
 
@@ -29,7 +34,6 @@ read.rsk <- function(filename){
   errors = merge(errors, rbr_error_codes, by.x = "type", by.y = "Error")
   errors[, channelName := paste0("channel", formatC(channelOrder, 1, format = "d", flag = "0"))]
   errors = merge(errors, channels[,.(channelName, shortName)], by = "channelName")
-  # errors = errors[,.(tstamp, sampleIndex, type, Description, shortName)]
 
   region_query = DBI::dbSendQuery(con, "
                                   SELECT
@@ -59,7 +63,7 @@ read.rsk <- function(filename){
   ret[["dbInfo"]] = dbInfo
   ret[["deployments"]] = deployments
   ret[["instrument"]] = instrument
-  ret[["channels"]] = channels[order(channelID), -c("feModuleType", "feModuleVersion", "longName", "channelName")]
+  ret[["channels"]] = channels[order(channelID), -c("channelName")]
   ret[["errors"]] = errors
   ret[["regions"]] = regions
   ret[["events"]] = events
@@ -79,7 +83,7 @@ read.rsk <- function(filename){
 #' @import data.table
 #'
 rsk.activations <- function(rsk, min_length_activation = 120){
-  if(rsk$dbInfo$type != "EPdesktop"){stop("only tested with EPdesktop RSK files")}
+  if(dbInfo$type[1] != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
   events = rsk[["events"]]
   data = rsk[["data"]]
   # ---- mark activations
@@ -91,9 +95,10 @@ rsk.activations <- function(rsk, min_length_activation = 120){
   data = data[n > min_length_activation/sample_period] # get rid of short activations
   data = na.omit(data)
   data[, "run" := .GRP, by = run] # renumber runs
-  # data[, n := NULL]
-  ret[["activations"]] = data[,.(startTime = min(dateTime), duration = max(dateTime) - min(dateTime)), by = run]
-  return(rsk)
+  data[, n := NULL]
+  # rsk[["data"]] = data
+  # rsk[["activations"]] = data[,.(startTime = min(dateTime), duration = max(dateTime) - min(dateTime)), by = run]
+  # return(rsk)
 }
 
 #' Add profile label and GPS metadata to data
