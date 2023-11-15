@@ -14,10 +14,15 @@ read.rsk <- function(filename){
   dbInfo <- RSQLite::dbReadTable(con, "dbInfo")
   if(dbInfo$type[1] != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
 
-  instrument = data.table::setDT(DBI::dbReadTable(con, "instruments"))
-  deployments = data.table::setDT(DBI::dbReadTable(con, "deployments"))
+  instrument = setDT(DBI::dbReadTable(con, "instruments"))
+  deployments = setDT(DBI::dbReadTable(con, "deployments"))
+  deployments = setDT(DBI::dbGetQuery(con, "SELECT
+                                      comment, loggerTimeDrift, timeOfDownload, name, sampleSize, mode, samplingPeriod
+                                      FROM deployments
+                                      JOIN schedules ON deployments.instrumentID = schedules.instrumentID
+                                      JOIN continuous ON schedules.scheduleID = continuous.continuousID"))
 
-  events = data.table::setDT(DBI::dbReadTable(con, "events"))
+  events = setDT(DBI::dbReadTable(con, "events"))
   events = merge(events, rbr_event_codes, by.x = "type", by.y = "Event")[order(tstamp)]
 
   channels = setDT(DBI::dbReadTable(con, "channels"))
@@ -29,6 +34,11 @@ read.rsk <- function(filename){
   channels = merge.data.table(channels, rbr_channels[,.(Type, Description)], by.x = "shortName", by.y = "Type", all.x = T)
   channels[, channelName := paste0("channel", formatC(channelID, 1, format = "d", flag = "0"))]
 
+  if("doxy23" %in% channels$shortName){
+    odo_serial = channels[shortName == "doxy23"]$serialID
+    channels[shortName == "temp16", serialID := odo_serial]
+  }
+  channels[shortName %in% c("cond10", "temp14"), serialID := instrument$serialID]
 
   errors = setDT(DBI::dbReadTable(con, "errors"))
   errors = merge(errors, rbr_error_codes, by.x = "type", by.y = "Error")
@@ -43,7 +53,7 @@ read.rsk <- function(filename){
                                   LEFT JOIN regionGeoData ON region.regionID = regionGeoData.regionID
                                   LEFT JOIN regionPlateau ON region.regionID = regionPlateau.regionID
                                   ")
-  regions = data.table::setDT(DBI::dbFetch(region_query))
+  regions = setDT(DBI::dbFetch(region_query))
   regions[, startTime := as.POSIXct(tstamp1/1000, origin = "1970-01-01", tz = "UTC")]
   DBI::dbClearResult(region_query)
 
@@ -54,7 +64,7 @@ read.rsk <- function(filename){
   sql_fields = paste(c("tstamp", fields), collapse = ",")
   sql_fields = paste("SELECT", sql_fields, "FROM data")
   data_query = DBI::dbSendQuery(con, paste(sql_fields,  ";"))
-  data = data.table::setDT(DBI::dbFetch(data_query))
+  data = setDT(DBI::dbFetch(data_query))
   DBI::dbClearResult(data_query)
   data[, dateTime := as.POSIXct(tstamp/1000, origin = "1970-01-01", tz = "UTC")]
   data.table::setnames(data, channels$channelName, channels$shortName, skip_absent = T)
