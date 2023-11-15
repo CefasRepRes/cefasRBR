@@ -6,31 +6,45 @@
 #' @return cefasRSK object
 #' @export
 #'
+
 read.rsk <- function(filename){
   options(digits.secs = 3) # RBR instruments have sub-second time resolution
   if(!file.exists(filename)){stop(paste(filename, "does not exist"))}
   con <- DBI::dbConnect(RSQLite::SQLite(), dbname = filename)
 
   dbInfo <- RSQLite::dbReadTable(con, "dbInfo")
-  if(dbInfo$type[1] != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
+  # if(dbInfo$type[1] != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
+  if(dbInfo$type[1] == "EasyParse"){easyparse = T}else{easyparse = F}
 
   instrument = setDT(DBI::dbReadTable(con, "instruments"))
-  deployments = setDT(DBI::dbReadTable(con, "deployments"))
-  deployments = setDT(DBI::dbGetQuery(con, "SELECT
+
+  if(easyparse){
+    deployments = setDT(DBI::dbGetQuery(con, "SELECT comment, loggerTimeDrift, timeOfDownload, name, sampleSize FROM deployments"))
+    deployments = cbind(deployments,DBI::dbGetQuery(con, "SELECT mode, samplingPeriod FROM schedules"))
+  } else {
+    deployments = setDT(DBI::dbGetQuery(con, "SELECT
                                       comment, loggerTimeDrift, timeOfDownload, name, sampleSize, mode, samplingPeriod
                                       FROM deployments
                                       JOIN schedules ON deployments.instrumentID = schedules.instrumentID
                                       JOIN continuous ON schedules.scheduleID = continuous.continuousID"))
+    }
 
   events = setDT(DBI::dbReadTable(con, "events"))
   events = merge(events, rbr_event_codes, by.x = "type", by.y = "Event")[order(tstamp)]
 
-  channels = setDT(DBI::dbReadTable(con, "channels"))
-  channels = setDT(DBI::dbGetQuery(con, "SELECT
-                                   instrumentChannels.channelID, shortName, units, CAST(serialID AS char) AS serialID
-                                   FROM channels
-                                   LEFT JOIN instrumentChannels ON channels.channelID = instrumentChannels.channelID
-                                   LEFT JOIN instrumentSensors ON instrumentChannels.channelOrder = instrumentSensors.channelOrder"))
+  # channels = setDT(DBI::dbReadTable(con, "channels"))
+  if(easyparse){
+    channels = setDT(DBI::dbGetQuery(con, "SELECT
+                                     instrumentChannels.channelID, shortName, units, 'unknown' AS serialID
+                                     FROM channels
+                                     LEFT JOIN instrumentChannels ON channels.channelID = instrumentChannels.channelID"))
+  } else {
+    channels = setDT(DBI::dbGetQuery(con, "SELECT
+                                     instrumentChannels.channelID, shortName, units, CAST(serialID AS char) AS serialID
+                                     FROM channels
+                                     LEFT JOIN instrumentChannels ON channels.channelID = instrumentChannels.channelID
+                                     LEFT JOIN instrumentSensors ON instrumentChannels.channelOrder = instrumentSensors.channelOrder"))
+  }
   channels = merge.data.table(channels, rbr_channels[,.(Type, Description)], by.x = "shortName", by.y = "Type", all.x = T)
   channels[, channelName := paste0("channel", formatC(channelID, 1, format = "d", flag = "0"))]
 
