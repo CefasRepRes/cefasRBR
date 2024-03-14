@@ -186,7 +186,7 @@ rsk.getCalibration.RBRCoda <- function(rsk){
 
 }
 
-write.rsk_csv <- function(rsk, filename){
+rsk.write_csv <- function(rsk, filename){
   fwrite(rsk$instrument, filename)
   fwrite(data.table(NA), filename, append = T)
   fwrite(rsk$channels, filename, append = T, col.names = T)
