@@ -10,7 +10,7 @@
 #' A list of the supported channel types by the RBR logger3 firmware, and a description of what those channels are.
 #' Used by `read.rsk`
 #'
-#' @source <https://docs.rbr-global.com/display/L3commandreference/Supported+Channel+Types>
+#' @source <https://docs.rbr-global.com/display/L3commandreference/Supported-Channel-Types>
 "rbr_channels"
 
 #' RBR logger3 command set - error codes

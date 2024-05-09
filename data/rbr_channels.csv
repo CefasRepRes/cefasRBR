@@ -1,4 +1,4 @@
-﻿Type,Equation,Units,Manufacturer,Description
+Type,Equation,Units,Manufacturer,Description
 acc_00,linear,g,RBR,Acceleration (in g's)
 alti00,distancefromechotiming,m,RBR,Distance from echo timing
 baro00,linear double,ps,RBR,Frequency counter[2]
@@ -13,30 +13,30 @@ cond09,corr_cond,mS/cm,RBR,Marine conductivity
 cond10,corr_cond,mS/cm,RBR,"Marine conductivity, Combined C.T cell"
 cond11,corr_cond1,mS/cm,RBR,"Marine conductivity, Deep combined C.T cell"
 cond12,corr_cond2,mS/cm,RBR,"Marine conductivity, 2000dbar Combined C.T cell"
-cond13,corr_cond3,mS/cm,RBR,"Marine conductivity, RBRlegato C.T cell"
-cond14,corr_cond3,mS/cm,RBR,"Marine conductivity, RBRsaildrone C cell"
-cond15,corr_cond3,mS/cm,RBR,"Marine conductivity, UV Antifouling CTD"
-cond16,corr_cond3,mS/cm,RBR,"Marine conductivity, 6000dbar C cell"
+cond13,corr_cond3,mS/cm,RBR,"Marine conductivity, RBRlegato C.T cell"
+cond14,corr_cond3,mS/cm,RBR,"Marine conductivity, RBRsaildrone C cell"
+cond15,corr_cond3,mS/cm,RBR,"Marine conductivity, UV Antifouling CTD"
+cond16,corr_cond3,mS/cm,RBR,"Marine conductivity, 6000dbar C cell"
 cond17,corr_cond3,mS/cm,RBR,"Marine conductivity, 6000dbar Combined C.T cell"
 cond18,corr_cond3,mS/cm,RBR,Marine conductivity
 cond19,corr_cond3,mS/cm,RBR,"Marine conductivity, Combined C.T cell"
 cond21,corr_cond3,mS/cm,RBR,"Marine conductivity, 2000dbar Combined C.T cell"
-cond22,corr_cond3,mS/cm,RBR,"Marine conductivity, RBRlegato C.T cell"
-cond24,corr_cond3,mS/cm,RBR,"Corrected Marine conductivity (inductive),transverse C.T cell, Ti"
-cond25,corr_cond3,mS/cm,RBR,"Corrected Marine conductivity (inductive),transverse C.T cell, POM"
+cond22,corr_cond3,mS/cm,RBR,"Marine conductivity, RBRlegato C.T cell"
+cond24,corr_cond3,mS/cm,RBR,"Corrected Marine conductivity (inductive),transverse C.T cell, Ti"
+cond25,corr_cond3,mS/cm,RBR,"Corrected Marine conductivity (inductive),transverse C.T cell, POM"
 doxy03,linear,%,Oxyguard,Dissolved oxygen saturation
 doxy07,linear,%,Aanderaa,"Optode: dissolved oxygen saturation, serial"
 doxy08,corr_rinkoB,%,JFE Advantech,Rinko-III (B): dissolved oxygen saturation with temperature
 doxy09,corr_rinkoBT,%,JFE Advantech/RBR,Rinko-III (B): dissolved oxygen saturation without temperature
 doxy10,linear,μmol/L,Aanderaa,"Optode: dissolved oxygen concenration, serial"
-doxy13,linear,%,RBR,"Dissolved oxygen saturation, serial RBRsolo DO|rt"
+doxy13,linear,%,RBR,"Dissolved oxygen saturation, serial RBRsolo DO|rt"
 doxy22,deri_o2sat_garcia,%,RBR,Dissolved oxygen saturation derived from concentration via Gordon and Garcia
-doxy23,corr_o2conc_garcia,μmol/L,RBR,"Dissolved oxygen concentration compensated, serial RBRcoda ODO"
+doxy23,corr_o2conc_garcia,μmol/L,RBR,"Dissolved oxygen concentration compensated, serial RBRcoda ODO"
 doxy25,linear,%,Oxyguard,Dissolved oxygen (saturation)
-doxy27,corr_o2conc_garcia,μmol/L,RBR,"Dissolved oxygen concentration compensated, serial RBRcoda ODO|slow"
-doxy28,corr_o2conc_garcia,μmol/L,RBR,"Dissolved oxygen concentration compensated, serial RBRcoda ODO|fast"
+doxy27,corr_o2conc_garcia,μmol/L,RBR,"Dissolved oxygen concentration compensated, serial RBRcoda ODO|slow"
+doxy28,corr_o2conc_garcia,μmol/L,RBR,"Dissolved oxygen concentration compensated, serial RBRcoda ODO|fast"
 doxy32,corr_rinkoB2,%,JFE Advantech,Rinko-III (B): dissolved oxygen saturation with temperature
-doxy33,corr_o2conc_garcia,μmol/L,RBR,"Dissolved oxygen concentration compensated, serial RBRcoda ODO, angled"
+doxy33,corr_o2conc_garcia,μmol/L,RBR,"Dissolved oxygen concentration compensated, serial RBRcoda ODO, angled"
 dpth01,deri_depth,m,-,Derived depth
 echo01,lin,ms,RBR,Echo timing
 eco_00,lin,counts,WET Labs,Generic channel for WET Labs ECO Triplet/Puck sensors
@@ -78,6 +78,8 @@ fluo39,linear,counts,Turner Designs,"Fluorescence, variable (Fv)"
 fluo40,linear,percent,Turner Designs,"Fluorescence, yield"
 fluo41,linear,μg/L,Seapoint,Fluorometry-Fluorescein
 fluo42,linear,counts,WET Labs,Chlorophyll a (ECO FLNTU)
+fluo43,linear,μg/L,RBR,Chlorophyll a (Tridente)
+fluo44,linear,ppb,RBR,fDOM (Tridente)
 hdng00,linear,degrees,RBR,Euler angle - heading
 irr_00,optic2,μW/cm²/nm,Satlantic,Irradiance
 irr_01,corr_irr,V,RBR,"Irradiance, 490nm"
@@ -86,10 +88,10 @@ irr_05,corr_irr2,μW/cm²/nm,RBR,"Irradiance (analog sensor), generic"
 irr_06,linear,μW/cm²/nm,RBR,"Irradiance (serial sensor), generic"
 mag_00,linear,μT,RBR,Magnetic field strength (in micro-Tesla's)
 meth00,corr_metsmet,μmol/L,Franatech,METS methane concentration
-opt_07,linear,°,RBR,Calibrated phase output from RBRcoda ODO
-opt_14,linear,°,RBR,Calibrated phase output from RBRcoda ODO|slow
-opt_15,linear,°,RBR,Calibrated phase output from RBRcoda ODO|fast
-opt_24,linear,°,RBR,"Calibrated phase output from RBRcoda ODO, angled"
+opt_07,linear,°,RBR,Calibrated phase output from RBRcoda ODO
+opt_14,linear,°,RBR,Calibrated phase output from RBRcoda ODO|slow
+opt_15,linear,°,RBR,Calibrated phase output from RBRcoda ODO|fast
+opt_24,linear,°,RBR,"Calibrated phase output from RBRcoda ODO, angled"
 orp_01,linear,V,Idronaut,ORP (Oxidation/Reduction Potential)
 par_00,linear,μmol/m²/s,Licor,PAR (photosynthetically active radiation)
 par_01,linear,μmol/m²/s,Biospherical,PAR (photosynthetically active radiation)
@@ -104,10 +106,10 @@ ph__01,linear,pH_units,Idronaut,pH
 ph__02,corr_ph,pH_units,Idronaut,Corrected pH
 phas00,linear,degrees,Aanderaa,Calibrated phase output from serial AADI Optode
 pres08,deri_seapres,dbar,-,Derived hydrostatic (sea) pressure
-pres23,linear,dbar,RBR,"Pressure (absolute, temperature compensated), serial RBRsolo D|rt, RBRduet T.D|rt"
+pres23,linear,dbar,RBR,"Pressure (absolute, temperature compensated), serial RBRsolo D|rt, RBRduet T.D|rt"
 pres24,corr_pres2,dbar,RBR,"Pressure (absolute, temperature compensated)"
-pres28,corr_pres5,dbar,RBR,"Pressure (absolute, temperature compensated)"
-pres29,corr_pres2,dbar,RBR,"Pressure (absolute, temperature compensated), UV Antifouling CTD"
+pres28,corr_pres5,dbar,RBR,"Pressure (absolute, temperature compensated)"
+pres29,corr_pres2,dbar,RBR,"Pressure (absolute, temperature compensated), UV Antifouling CTD"
 ptch00,linear,degrees,RBR,Euler angle - pitch
 roll00,linear,degrees,RBR,Euler angle - roll
 sal_00,deri_salinity,PSU,-,"Derived salinity, PSS78."
@@ -118,10 +120,10 @@ temp04,temp,°C,RBR,Temperature (T-string)
 temp06,corr_metstemp,°C,Franatech,"Temperature, METS"
 temp07,linear,°C,Aanderaa,"Temperature, from serial Optode"
 temp09,temp,°C,RBR,Temperature
-temp13,linear,°C,RBR,"Temperature, serial RBRsolo D|rt, RBRduet T.D|rt"
+temp13,linear,°C,RBR,"Temperature, serial RBRsolo D|rt, RBRduet T.D|rt"
 temp14,temp,°C,RBR,"Temperature, combined C.T cell"
-temp16,linear,°C,RBR,"Temperature, serial RBRcoda ODO"
-temp17,linear,°C,RBR,"Temperature, serial RBRcoda ODO|slow"
+temp16,linear,°C,RBR,"Temperature, serial RBRcoda ODO"
+temp17,linear,°C,RBR,"Temperature, serial RBRcoda ODO|slow"
 temp19,temp,°C,RBR,Temperature (fast)
 temp22,temp,°C,RBR,"Temperature, compensating channel for conductivity"
 temp23,linear,°C,Campbell,"Temperature, OBS-501"
@@ -129,12 +131,12 @@ temp26,temp,°C,RBR,Temperature RBRlegato (1s)
 temp27,temp,°C,RBR,Temperature RBRlegato (fast response)
 temp30,temp,°C,RBR,"Temperature, compensating channel for irradiance (RBR 490nm Radiometer)"
 temp31,temp,°C,RBR,"Temperature, standard, UV Antifouling CTD"
-temp32,temp,°C,RBR,"Temperature, standard, 6000dbar Combined C.T cell"
-temp33,temp,°C,RBR,"Temperature, fast, 6000dbar Combined C.T cell"
-temp34,temp,°C,RBR,"Temperature, compensating channel for Marine C and CT 6000m"
+temp32,temp,°C,RBR,"Temperature, standard, 6000dbar Combined C.T cell"
+temp33,temp,°C,RBR,"Temperature, fast, 6000dbar Combined C.T cell"
+temp34,temp,°C,RBR,"Temperature, compensating channel for Marine C and CT 6000m"
 temp35,temp,°C,RBR,"Temperature, fast, transverse CTD"
 temp36,temp,°C,RBR,"Temperature, standard, transverse CTD"
-temp37,linear,°C,RBR,"Temperature, serial RBRcoda ODO, angled"
+temp37,linear,°C,RBR,"Temperature, serial RBRcoda ODO, angled"
 tran00,linear,trans_units,generic,Transmittance[1]
 tran01,linear,%,WET Labs,Transmittance
 tran02,linear,V,WET Labs,Transmittance
@@ -150,6 +152,7 @@ turb08,linear,NTU,Campbell,"Turbidity, OBS-501 optical backscatter"
 turb09,linear,NTU,Campbell,"Turbidity, OBS-501 suspended solids"
 turb10,linear,counts,WET Labs,Turbidity (ECO FLNTU)
 turb11,linear,V,Sequoia Scientific,"Turbidity, LISST ABS acoustic backscatter"
+turb12,linear,FTU,RBR,"Turbidity (Tridente)"
 volt00,linear,V,generic,Voltage (0V to +5V)
 volt01,linear,V,generic,Voltage (–2.5V to +2.5V)
 volt02,linear,V,generic,Voltage (0V to +10V)
