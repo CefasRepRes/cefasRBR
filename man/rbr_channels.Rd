@@ -5,10 +5,10 @@
 \alias{rbr_channels}
 \title{RBR logger3 command set - channel types}
 \format{
-An object of class \code{data.table} (inherits from \code{data.frame}) with 155 rows and 5 columns.
+An object of class \code{data.table} (inherits from \code{data.frame}) with 158 rows and 5 columns.
 }
 \source{
-<https://docs.rbr-global.com/display/L3DOCpublicvA/Supported+Channel+Types>
+<https://docs.rbr-global.com/display/L3commandreference/Supported-Channel-Types>
 }
 \usage{
 rbr_channels

@@ -2,7 +2,7 @@
 % Please edit documentation in R/rsk.R
 \name{rsk.regions}
 \alias{rsk.regions}
-\title{Add profile label and GPS metadata to data}
+\title{Add profile label and GPS metadata to extracted data}
 \usage{
 rsk.regions(rsk)
 }
@@ -13,5 +13,5 @@ rsk.regions(rsk)
 cefasRSK object
 }
 \description{
-Add profile label and GPS metadata to data
+Add profile label and GPS metadata to extracted data
 }

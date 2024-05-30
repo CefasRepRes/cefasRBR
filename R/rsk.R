@@ -125,7 +125,7 @@ rsk.activations <- function(rsk, min_length_activation = 120){
   # return(rsk)
 }
 
-#' Add profile label and GPS metadata to data
+#' Add profile label and GPS metadata to extracted data
 #'
 #' @param rsk an object of class cefasRSK
 #'
@@ -194,7 +194,62 @@ rsk.write_csv <- function(rsk, filename){
   fwrite(rsk$data, filename, append = T, col.names = T)
 }
 
-write.rsk_plot <- function(rsk){
-  #
+#' Insert location metadata into .RSK file from table
+#'
+#' @param filename .rsk file path
+#' @param tbl a data.frame containing the following columns
+#' dateTime - POSIXct timestamp
+#' latitude - in decimal degrees
+#' longitude - in decimal degrees
+#' label - a station code, can be numeric or text
+#' description - text, can be empty
+#'
+#' @return nothing
+#'
+#' @examples
+#' arb_data = data.frame(
+#' label = c(10, 55),
+#' description = c("arbitary position data"),
+#' dateTime = as.POSIXct(c("2024-04-21 08:19", "2024-04-21 09:30"), tz = "UTC"),
+#' latitude = c(52.1, 52.12),
+#' longitude = c(2, 2.1)
+#' )
+#' ## Not run:
+#' rsk.addgeoregion("myrsk.rsk", arb_data)
+#' ## End(Not run)
+#' @export
+rsk.addgeoregion <- function(filename, tbl){
+  # validation of tbl
+  expected_columns = c("dateTime", "latitude", "longitude", "label", "description")
+  if(!all(expected_columns %in% names(tbl))) {
+    missing = expected_columns[!expected_columns %in% names(tbl)]
+    stop(paste(missing, "not found in tbl, unable to write geo regions"))
+  }
+
+  setDT(tbl)
+
+  if(!file.exists(filename)){stop(paste(filename, "does not exist"))}
+  con <- DBI::dbConnect(RSQLite::SQLite(), dbname = filename)
+
+  region  = setDT(DBI::dbReadTable(con, "region"))
+  geo  = setDT(DBI::dbReadTable(con, "regionGeoData"))
+
+  tduration = duration*1000 # rsk timestamps are in 1000ths of a second since 1970
+
+  tbl[, regionID := max(region$regionID) + 1:.N]
+  tbl[, tstamp1 := as.numeric(dateTime)*1000]
+  tbl[, tstamp2 := tstamp1 + tduration]
+
+  new_regions = tbl[,.(
+    datasetID = max(region$regionID),
+    regionID, type = "GPS",
+    tstamp1, tstamp2,
+    label, description,
+    collapsed = 0)]
+  new_geo = tbl[,.(regionID, latitude, longitude)]
+  DBI::dbAppendTable(con, "region", new_regions)
+  DBI::dbAppendTable(con, "regionGeoData", new_geo)
+  print(paste("wrote", nrow(new_regions),"to rsk"))
+  DBI::dbDisconnect(con)
 }
 
