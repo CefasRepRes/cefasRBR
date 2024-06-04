@@ -13,6 +13,7 @@ read.rsk <- function(filename){
   con <- DBI::dbConnect(RSQLite::SQLite(), dbname = filename)
 
   dbInfo <- RSQLite::dbReadTable(con, "dbInfo")
+  tzoffset = RSQLite::dbGetQuery(con, "SELECT value FROM parameterKeys WHERE key = 'OFFSET_FROM_UTC'") * 3600
   # if(dbInfo$type[1] != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
   if(dbInfo$type[1] == "EasyParse"){easyparse = T}else{easyparse = F}
 
@@ -68,7 +69,7 @@ read.rsk <- function(filename){
                                   LEFT JOIN regionPlateau ON region.regionID = regionPlateau.regionID
                                   ")
   regions = setDT(DBI::dbFetch(region_query))
-  regions[, startTime := as.POSIXct(tstamp1/1000, origin = "1970-01-01", tz = "UTC")]
+  regions[, startTime := as.POSIXct((tstamp1/1000) + tzoffset, origin = "1970-01-01", tz = "UTC")]
   DBI::dbClearResult(region_query)
 
   sample_period = RSQLite::dbReadTable(con, "continuous")$samplingPeriod / 1000
@@ -80,7 +81,7 @@ read.rsk <- function(filename){
   data_query = DBI::dbSendQuery(con, paste(sql_fields,  ";"))
   data = setDT(DBI::dbFetch(data_query))
   DBI::dbClearResult(data_query)
-  data[, dateTime := as.POSIXct(tstamp/1000, origin = "1970-01-01", tz = "UTC")]
+  data[, dateTime := as.POSIXct((tstamp/1000) + tzoffset, origin = "1970-01-01", tz = "UTC")]
   data.table::setnames(data, channels$channelName, channels$shortName, skip_absent = T)
 
   ret = list() # Initialise return list containing data and metadata
@@ -218,7 +219,7 @@ rsk.write_csv <- function(rsk, filename){
 #' rsk.addgeoregion("myrsk.rsk", arb_data)
 #' ## End(Not run)
 #' @export
-rsk.addgeoregion <- function(filename, tbl){
+rsk.addgeoregion <- function(filename, tbl, duration = 120){
   # validation of tbl
   expected_columns = c("dateTime", "latitude", "longitude", "label", "description")
   if(!all(expected_columns %in% names(tbl))) {
@@ -233,18 +234,20 @@ rsk.addgeoregion <- function(filename, tbl){
 
   region  = setDT(DBI::dbReadTable(con, "region"))
   geo  = setDT(DBI::dbReadTable(con, "regionGeoData"))
+  tzoffset = RSQLite::dbGetQuery(con, "SELECT value FROM parameterKeys WHERE key = 'OFFSET_FROM_UTC'")
+  tzoffset = as.numeric(tzoffset$value) * 3600
 
   tduration = duration*1000 # rsk timestamps are in 1000ths of a second since 1970
 
   tbl[, regionID := max(region$regionID) + 1:.N]
-  tbl[, tstamp1 := as.numeric(dateTime)*1000]
+  tbl[, tstamp1 := bit64::as.integer64(as.numeric(dateTime + tzoffset)*1000)]
   tbl[, tstamp2 := tstamp1 + tduration]
 
   new_regions = tbl[,.(
     datasetID = max(region$regionID),
     regionID, type = "GPS",
     tstamp1, tstamp2,
-    label, description,
+    label, description = "position from cefasRBR",
     collapsed = 0)]
   new_geo = tbl[,.(regionID, latitude, longitude)]
   DBI::dbAppendTable(con, "region", new_regions)
@@ -252,4 +255,3 @@ rsk.addgeoregion <- function(filename, tbl){
   print(paste("wrote", nrow(new_regions),"to rsk"))
   DBI::dbDisconnect(con)
 }
-
