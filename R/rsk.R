@@ -69,7 +69,7 @@ read.rsk <- function(filename){
                                   LEFT JOIN regionPlateau ON region.regionID = regionPlateau.regionID
                                   ")
   regions = setDT(DBI::dbFetch(region_query))
-  regions[, startTime := as.POSIXct((tstamp1/1000), origin = "1970-01-01", tz = "UTC") + tzoffset]
+  regions[, startTime := as.POSIXct((tstamp1/1000), origin = "1970-01-01", tz = "UTC") - tzoffset]
   DBI::dbClearResult(region_query)
 
   sample_period = RSQLite::dbReadTable(con, "continuous")$samplingPeriod / 1000
@@ -81,7 +81,7 @@ read.rsk <- function(filename){
   data_query = DBI::dbSendQuery(con, paste(sql_fields,  ";"))
   data = setDT(DBI::dbFetch(data_query))
   DBI::dbClearResult(data_query)
-  data[, dateTime := as.POSIXct((tstamp/1000), origin = "1970-01-01", tz = "UTC") + tzoffset]
+  data[, dateTime := as.POSIXct((tstamp/1000), origin = "1970-01-01", tz = "UTC") - tzoffset]
   data.table::setnames(data, channels$channelName, channels$shortName, skip_absent = T)
 
   ret = list() # Initialise return list containing data and metadata
@@ -236,7 +236,7 @@ rsk.addgeoregion <- function(filename, tbl, duration = 120){
   if(dbInfo$type[1] == "EasyParse"){easyparse = T}else{easyparse = F}
 
   if(easyparse){
-    tzoffset = 0 # actually need to check this
+    tzoffset = 0 # TODO actually need to check this
   } else {
     tzoffset = RSQLite::dbGetQuery(con, "SELECT value FROM parameterKeys WHERE key = 'OFFSET_FROM_UTC'")
     tzoffset = as.numeric(tzoffset$value) * 3600
