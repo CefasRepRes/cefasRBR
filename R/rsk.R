@@ -204,6 +204,7 @@ rsk.write_csv <- function(rsk, filename){
 #' longitude - in decimal degrees
 #' label - a station code, can be numeric or text
 #' description - text, can be empty
+#' @param duration how long to set the length of the annotation, in seconds
 #'
 #' @return nothing
 #'
@@ -261,5 +262,64 @@ rsk.addgeoregion <- function(filename, tbl, duration = 120){
   DBI::dbAppendTable(con, "region", new_regions)
   DBI::dbAppendTable(con, "regionGeoData", new_geo)
   print(paste("wrote", nrow(new_regions),"to rsk"))
+  DBI::dbDisconnect(con)
+}
+
+#' Recalculate profiles for a .RSK file
+#'
+#' This tool gives you a little more control on the automated profile detection provided by ruskin
+#'
+#'  Note: this tool will overwrite any annotations already present in the .RSK, use with caution
+#'  Note: this tool does not attempt to identify casts, TODO
+#'
+#' @param filename the .RSK file
+#' @param salinity_tol the minimum salinity for the start of a profile, default = 0.1
+#' @param prs_tol the threshold increase in pressure over the minimum, default is 0.1 (i.e. minimum recorded pressure + 0.1 hPa)
+#'
+#' @returns writes directly to the .RSK
+#' @export
+rsk.recalculate_profiles <- function(filename, salinity_tol = 0.1, prs_tol = 0.1){
+  con <- DBI::dbConnect(RSQLite::SQLite(), dbname = filename)
+  dbInfo <- RSQLite::dbReadTable(con, "dbInfo")
+  if(dbInfo$type[1] == "EasyParse"){easyparse = T}else{easyparse = F}
+  region  = setDT(DBI::dbReadTable(con, "region"))
+  events  = setDT(DBI::dbReadTable(con, "events"))
+  channels  = setDT(DBI::dbReadTable(con, "channels"))
+  channels[, `:=`(channelName, paste0("channel", formatC(channelID,  1, format = "d", flag = "0")))]
+  starts = events[type == 24] # twists
+  stops = events[type == 25] # twists
+  stops = stops[tstamp > min(starts$tstamp)]
+  if(nrow(starts) == nrow(stops)){
+    starts = cbind(starts, stops[,.(tstamp_end = tstamp)])
+  }else{stop()}
+  starts[, duration := (tstamp_end/1000) - (tstamp/1000)]
+  starts = starts[duration > 60]
+  DATA  = setDT(DBI::dbReadTable(con, "data"))[order(tstamp)]
+  setnames(DATA, channels$channelName, channels$shortName, skip_absent = T)
+  m = rbind(starts[,.(tstamp, id = 1)], DATA[,.(tstamp, pres24, sal_00, id = 0)], fill=T)[order(tstamp)]
+  m[, id := cumsum(id)]
+  m = m[!is.na(pres24) & id > 0]
+  apres = min(m$pres24)
+  m[, maxprs := max(pres24), by = id]
+  m = m[m[pres24 == maxprs, .(id, maxprs_tstamp = tstamp)], on = "id"]
+  m = m[sal_00 > 0.1 & pres24 > apres+0.10]
+  m[, cast := "down"]
+  m[tstamp > maxprs_tstamp, cast := "up"]
+
+  profiles = m[,.(datasetID = 1, type = "PROFILE",
+                  tstamp1 = min(tstamp+3000), tstamp2 = max(tstamp-3000),
+                  label = .GRP, description = "cefasRBR generated profile",
+                  collapsed = 0), by = list(regionID = id)]
+  # down = m[cast == "down",.(datasetID = 1, type = "CAST",
+  #                 tstamp1 = min(tstamp+10000), tstamp2 = max(tstamp),
+  #                 label = "", description = "cefasRBR generated cast",
+  #                 collapsed = 0), by = list(regionID = id)]
+  # up = m[cast == "up",.(datasetID = 1, type = "CAST",
+  #                 tstamp1 = min(tstamp), tstamp2 = max(tstamp-10000),
+  #                 label = "", description = "cefasRBR generated cast",
+  #                 collapsed = 0), by = list(regionID = id)]
+  # regions = rbind(profiles, down, up)[order(tstamp1)]
+  regions[, regionID := 1:.N]
+  DBI::dbWriteTable(con, "region", profiles, overwrite = T)
   DBI::dbDisconnect(con)
 }

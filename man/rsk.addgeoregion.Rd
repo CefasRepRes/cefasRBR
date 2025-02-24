@@ -4,7 +4,7 @@
 \alias{rsk.addgeoregion}
 \title{Insert location metadata into .RSK file from table}
 \usage{
-rsk.addgeoregion(filename, tbl)
+rsk.addgeoregion(filename, tbl, duration = 120)
 }
 \arguments{
 \item{filename}{.rsk file path}
@@ -15,6 +15,8 @@ latitude - in decimal degrees
 longitude - in decimal degrees
 label - a station code, can be numeric or text
 description - text, can be empty}
+
+\item{duration}{how long to set the length of the annotation, in seconds}
 }
 \value{
 nothing
@@ -23,7 +25,7 @@ nothing
 Insert location metadata into .RSK file from table
 }
 \examples{
-arb_data = data.table(
+arb_data = data.frame(
 label = c(10, 55),
 description = c("arbitary position data"),
 dateTime = as.POSIXct(c("2024-04-21 08:19", "2024-04-21 09:30"), tz = "UTC"),
