@@ -319,7 +319,7 @@ rsk.recalculate_profiles <- function(filename, salinity_tol = 0.1, prs_tol = 0.1
   #                 label = "", description = "cefasRBR generated cast",
   #                 collapsed = 0), by = list(regionID = id)]
   # regions = rbind(profiles, down, up)[order(tstamp1)]
-  regions[, regionID := 1:.N]
+  # regions[, regionID := 1:.N]
   DBI::dbWriteTable(con, "region", profiles, overwrite = T)
   DBI::dbDisconnect(con)
 }
