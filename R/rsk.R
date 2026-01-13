@@ -177,14 +177,13 @@ rsk.getCalibration.RBRCoda <- function(rsk){
   }
   cal_data = rsk$data[!is.na(refValue)]
   if(all(cal_data$refUnit == "%")){
-
+    cal_data[refValue == 100, true_saturation := cefasMOS::oxygen.sat(temp16, 0, p_atm = pres24*100)]
+    cal_data[refValue == 0, true_saturation := 0]
+    return(cal_data)
   }
-  if(all(cal_data$refUnit == "x")){
-
-  }else{
-    stop("calibration reference units are not all the same type, please amend .rsk")
+  else{
+    stop("calibration reference units are not %, please amend .rsk")
   }
-
 }
 
 rsk.write_csv <- function(rsk, filename){
