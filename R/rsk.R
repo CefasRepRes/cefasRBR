@@ -140,7 +140,7 @@ rsk.regions <- function(rsk){
     region = rsk$regions[regionID == ID]
     region[label == "", label := ID]
     rsk$data[tstamp %between% c(region$tstamp1, region$tstamp2),
-             c("profile", "startTime") := list(region$label, min(region$startTime))]
+             c("profile", "startTime") := list(ID, min(region$startTime))]
   }
   for(ID in rsk$regions[type == "CAST"]$regionID){
     region = rsk$regions[regionID == ID]
@@ -165,9 +165,16 @@ rsk.regions <- function(rsk){
 }
 
 rsk.getCalibration.RBRCoda <- function(rsk){
-  if(rsk$dbInfo$type != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
+  if(rsk$dbInfo$type[1] != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
 
   if(nrow(rsk$regions[type == "CALIBRATION_PLATEAU"]) < 2){stop("Calibration requires at least two calibration plateaus")}
+
+  if("temp16" %in% colnames(rsk$data)){
+    o2_temp_var = "temp16"
+  }
+  if("temp37" %in% colnames(rsk$data)){
+    o2_temp_var = "temp37"
+  }
 
   # Collect calibrations
   for(ID in rsk$regions[type == "CALIBRATION_PLATEAU"]$regionID){
@@ -177,7 +184,7 @@ rsk.getCalibration.RBRCoda <- function(rsk){
   }
   cal_data = rsk$data[!is.na(refValue)]
   if(all(cal_data$refUnit == "%")){
-    cal_data[refValue == 100, true_saturation := cefasMOS::oxygen.sat(temp16, 0, p_atm = pres24*100)]
+    cal_data[refValue == 100, true_saturation := cefasMOS::oxygen.sat(get(o2_temp_var), 0, p_atm = pres24*100)]
     cal_data[refValue == 0, true_saturation := 0]
     return(cal_data)
   }
