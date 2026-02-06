@@ -36,7 +36,7 @@ read.rsk <- function(filename){
   # channels = setDT(DBI::dbReadTable(con, "channels"))
   if(easyparse){
     channels = setDT(DBI::dbGetQuery(con, "SELECT
-                                     instrumentChannels.channelID, shortName, units, 'unknown' AS serialID
+                                     channels.channelID, shortName, units, 'unknown' AS serialID
                                      FROM channels
                                      LEFT JOIN instrumentChannels ON channels.channelID = instrumentChannels.channelID"))
   } else {
@@ -72,7 +72,12 @@ read.rsk <- function(filename){
   regions[, startTime := as.POSIXct((tstamp1/1000), origin = "1970-01-01", tz = "UTC") - tzoffset]
   DBI::dbClearResult(region_query)
 
-  sample_period = RSQLite::dbReadTable(con, "continuous")$samplingPeriod / 1000
+  if(DBI::dbExistsTable(con, "continuous")){
+    sample_period = RSQLite::dbReadTable(con, "continuous")$samplingPeriod / 1000
+  }
+  if(DBI::dbExistsTable(con, "schedules")){
+    sample_period = RSQLite::dbReadTable(con, "schedules")$samplingPeriod / 1000
+  }
 
   fields = DBI::dbListFields(con, "data") # data names
   fields = fields[!grepl("tstamp", fields)]
