@@ -72,7 +72,12 @@ read.rsk <- function(filename){
   regions[, startTime := as.POSIXct((tstamp1/1000), origin = "1970-01-01", tz = "UTC") - tzoffset]
   DBI::dbClearResult(region_query)
 
-  sample_period = RSQLite::dbReadTable(con, "continuous")$samplingPeriod / 1000
+  # determine sample period
+  if(DBI::dbExistsTable(con, "continuous")){
+    sample_period = DBI::dbReadTable(con, "continuous")$samplingPeriod / 1000
+  }else{
+    stop(print(filename))
+  }
 
   fields = DBI::dbListFields(con, "data") # data names
   fields = fields[!grepl("tstamp", fields)]
