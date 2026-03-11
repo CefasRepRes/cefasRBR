@@ -170,7 +170,7 @@ rsk.regions <- function(rsk){
 }
 
 rsk.getCalibration.RBRCoda <- function(rsk){
-  if(rsk$dbInfo$type != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
+  if(rsk$dbInfo$type[1] != "EPdesktop"){warning("only tested with EPdesktop RSK files")}
 
   if(nrow(rsk$regions[type == "CALIBRATION_PLATEAU"]) < 2){stop("Calibration requires at least two calibration plateaus")}
 
@@ -181,15 +181,7 @@ rsk.getCalibration.RBRCoda <- function(rsk){
              c("refValue", "refUnit") := list(region$refValue, region$refUnit)]
   }
   cal_data = rsk$data[!is.na(refValue)]
-  if(all(cal_data$refUnit == "%")){
-
-  }
-  if(all(cal_data$refUnit == "x")){
-
-  }else{
-    stop("calibration reference units are not all the same type, please amend .rsk")
-  }
-
+  return(cal_data)
 }
 
 rsk.write_csv <- function(rsk, filename){
