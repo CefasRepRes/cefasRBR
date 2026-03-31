@@ -9,7 +9,7 @@ https://rbr-global.com/products/standard-loggers/
 The package can be installed directly from github using the remotes package:
 
 ```r
-remotes::install_github("CefasRepRes/cefasRBR")
+remotes::install_git("https://github.com/cefasrepres/cefasrbr")
 ```
 
 ## Related packages
